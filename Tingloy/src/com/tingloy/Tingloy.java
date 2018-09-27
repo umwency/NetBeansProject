@@ -19,7 +19,7 @@ public class Tingloy extends javax.swing.JFrame {
     static int milliseconds = 0;
     static int seconds = 0;
     static int minutes = 0;
-    static boolean state = true;
+
     
     
     public Tingloy() {
@@ -108,18 +108,26 @@ public class Tingloy extends javax.swing.JFrame {
                             milliseconds = 0;
                         }
                         
-                        if (seconds > 60)
+                        if (seconds > 13)
                         {
                             minutes++;
                             seconds = 0;
                             milliseconds =0;
                         }
                         
-                        Milliseconds.setText(":"+milliseconds);
+                        Milliseconds.setText(""+ milliseconds);
                         milliseconds++;
                         
+                        if(seconds < 10)
+                        Seconds.setText(":0"+seconds);
+                        else
                         Seconds.setText(":"+seconds);
-                        Minutes.setText(":"+minutes);
+                            
+                        if (minutes < 10)
+                        Minutes.setText("0" + minutes);
+                        else
+                        Minutes.setText("" + minutes);
+                        
                         
                     }
                     catch(Exception e){}
