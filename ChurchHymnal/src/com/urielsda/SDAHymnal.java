@@ -23,11 +23,11 @@ public class SDAHymnal extends javax.swing.JFrame {
     /**
      * Creates new form SDAHymnal
      */
+    private String GlobalselectedSongs;
     public SDAHymnal() {
         initComponents();
-         //final String dir = System.getProperty("user.dir");
-         
-         
+
+
     }
 
     /**
@@ -38,7 +38,7 @@ public class SDAHymnal extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        jDialog1 = new javax.swing.JDialog();
         jScrollPane1 = new javax.swing.JScrollPane();
         jSonglist = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
@@ -46,6 +46,17 @@ public class SDAHymnal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,6 +68,15 @@ public class SDAHymnal extends javax.swing.JFrame {
                 "Hymn Number", "Title"
             }
         ));
+        jSonglist.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+
+
+        jSonglist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jSonglistMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jSonglist);
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -65,7 +85,7 @@ public class SDAHymnal extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Hyme Numbber");
+        jLabel1.setText("Hymn Number");
 
         jLabel2.setText("Title");
 
@@ -114,9 +134,11 @@ public class SDAHymnal extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(397, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(43, Short.MAX_VALUE))
         );
+
+
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -126,41 +148,56 @@ public class SDAHymnal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
- 
-        DefaultTableModel model = (DefaultTableModel) jSonglist.getModel();
-        model.addRow(new Object[]{jTextField1.getText(),jTextField2.getText()});
-/*
-         final String dir = System.getProperty("user.dir");
-         String[] splitFileStr = null;
-         String fullpath = dir + "/sources/lyrics/titles.csv";
-        System.out.println("current dir = " + dir);
-        BufferedReader br = null; 
-        try {
-            br = new BufferedReader(new FileReader(fullpath));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(SDAHymnal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-  
-  String st;
-  int index = 0;
-        try {
-            while ((st = br.readLine()) != null)  
-                splitFileStr = st.split(",");
+        try {                                         
+
+            DefaultTableModel model = (DefaultTableModel) jSonglist.getModel();
+            // model.addRow(new Object[]{jTextField1.getText(),jTextField2.getText()});
+            
+            final String dir = System.getProperty("user.dir");
+            String[] splitFileStr = null;
+            String fullpath = dir + "/ChurchHymnal//sources/lyrics/MasterList.csv"; // this is to be modified on netbeans
+            System.out.println("current dir = " + dir);
+            BufferedReader br = null;     
+            try {
+                br = new BufferedReader(new FileReader(fullpath));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(SDAHymnal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            String st;
+            int index = 0;
+            try {
+                while ((st = br.readLine()) != null) {
+                    splitFileStr = st.split(",");
+                    model.addRow(new Object[]{splitFileStr[index],splitFileStr[index+1]});
+                 
+                }
+            }catch (Exception e){}
+            br.close();            
         } catch (IOException ex) {
             Logger.getLogger(SDAHymnal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    System.out.println(splitFileStr[index]); 
-    System.out.println(splitFileStr[index+1]); 
-    //model.addRow(new Object[]{splitFileStr[index],splitFileStr[index+1]});
-    model.insertRow(index, new Object[]{splitFileStr[index],splitFileStr[index+1]});
-  index++;
-*/
+         
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jSonglistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSonglistMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jSonglist.getModel();
+        LyricsPanel lyrics = new LyricsPanel();
+        int row = jSonglist.rowAtPoint(evt.getPoint());
+        int col = jSonglist.columnAtPoint(evt.getPoint());
+        //JOptionPane.showMessageDialog(null,model.getValueAt(row,col));
+         GlobalselectedSongs = model.getValueAt(row,col).toString();
+         lyrics.recievedHymnalValue = GlobalselectedSongs;
+         lyrics.start();
+         System.out.println(getHymnalValue());
+    }//GEN-LAST:event_jSonglistMouseClicked
+
+    String getHymnalValue()
+    {
+        //System.out.println(GlobalselectedSongs);
+        return GlobalselectedSongs;
+    }
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -191,30 +228,34 @@ public class SDAHymnal extends javax.swing.JFrame {
                 new SDAHymnal().setVisible(true);
             }
         });
-         final String dir = System.getProperty("user.dir");
+
+        /*
+        final String dir = System.getProperty("user.dir");
          String[] splitFileStr = null;
-         String fullpath = dir + "/sources/lyrics/test.txt";
-        System.out.println("current dir = " + fullpath);
+         String fullpath = dir + "/ChurchHymnal//sources/lyrics/titles.csv"; // this is not working on netbeans
+        System.out.println("current dir = " + dir);
+        
         File file = new File(fullpath);
         BufferedReader br = new BufferedReader(new FileReader(file)); 
   
   String st;
   int index = 0;
-  while ((st = br.readLine()) != null) 
+  while ((st = br.readLine()) != null) {
       splitFileStr = st.split(",");  
-    System.out.println(st); 
-    //System.out.println(splitFileStr[index+1]); 
-  index++;
+      System.out.println(splitFileStr[index] + splitFileStr[index+1]);
+   }
+  br.close();
+  */
   } 
-  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jSonglist;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    // End of variables declaration//GEN-END:variables
+   // End of variables declaration//GEN-END:variables
 }
