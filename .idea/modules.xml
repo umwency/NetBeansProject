@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ChurchHymnal/ChurchHymnal.iml" filepath="$PROJECT_DIR$/ChurchHymnal/ChurchHymnal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tingloy/Tingloy.iml" filepath="$PROJECT_DIR$/Tingloy/Tingloy.iml" />
+    </modules>
+  </component>
+</project>
