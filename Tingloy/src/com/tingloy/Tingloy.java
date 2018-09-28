@@ -5,7 +5,10 @@
  */
 package com.tingloy;
 
+import static java.lang.Thread.*;
 import static java.lang.Thread.sleep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,9 +19,9 @@ public class Tingloy extends javax.swing.JFrame {
     /**
      * Creates new form Tingloy
      */
+    static int minutes = 1;
+    static int seconds = 5;
     static int milliseconds = 0;
-    static int seconds = 0;
-    static int minutes = 0;
 
     
     
@@ -39,6 +42,7 @@ public class Tingloy extends javax.swing.JFrame {
         Minutes = new javax.swing.JLabel();
         Milliseconds = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        PortValue = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,14 +62,19 @@ public class Tingloy extends javax.swing.JFrame {
             }
         });
 
+        PortValue.setText("Port Value");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(93, Short.MAX_VALUE)
+                .addContainerGap(45, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(PortValue)
+                        .addGap(58, 58, 58)
+                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Minutes)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -83,7 +92,9 @@ public class Tingloy extends javax.swing.JFrame {
                     .addComponent(Seconds)
                     .addComponent(Milliseconds, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(PortValue)))
         );
 
         pack();
@@ -92,52 +103,67 @@ public class Tingloy extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         //state = true;
-        Thread t = new Thread(){
-        
+        PortChecker pc = new PortChecker();
+        pc.start();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Tingloy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        PortValue.setText("" + pc.getPortValue());
+
+        Thread t = new Thread(){        
             public void run()
             {
                 for(;;)
                 {
+                    if(pc.getPortValue() == 0)
+                    {
+                        minutes += 2;
+                    }
                     {
                     try
                     {
                         sleep(1);
-                        if (milliseconds > 1000)
-                        {
-                            seconds++;
+                        if (milliseconds > 1000) {
                             milliseconds = 0;
+                            seconds--;
                         }
-                        
-                        if (seconds > 13)
-                        {
-                            minutes++;
-                            seconds = 0;
-                            milliseconds =0;
+                        if (seconds <= 0 && minutes > 0) {
+                            seconds = 9;
+                            milliseconds = 0;
+                            minutes--;
                         }
-                        
                         Milliseconds.setText(""+ milliseconds);
                         milliseconds++;
-                        
+
                         if(seconds < 10)
-                        Seconds.setText(":0"+seconds);
+                        Seconds.setText("0"+seconds);
                         else
-                        Seconds.setText(":"+seconds);
-                            
+                        Seconds.setText(""+seconds);
+
                         if (minutes < 10)
                         Minutes.setText("0" + minutes);
                         else
                         Minutes.setText("" + minutes);
-                        
-                        
                     }
                     catch(Exception e){}
                     }
+                    if (minutes == 0 && seconds == 0)
+                    {
+                        Minutes.setText("0" + minutes);
+                        Seconds.setText(":0"+seconds);
+                        Milliseconds.setText("000");
+                        break;
+                    }
+                   PortValue.setText("" + pc.getPortValue());       
                 }
             }
-            
         };
-        t.start();
-    }//GEN-LAST:event_jButton1ActionPerformed
+     
+      t.start();
+       
+    }
 
     /**
      * @param args the command line arguments
@@ -165,9 +191,7 @@ public class Tingloy extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Tingloy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+       java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Tingloy().setVisible(true);
             }
@@ -177,6 +201,7 @@ public class Tingloy extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Milliseconds;
     private javax.swing.JLabel Minutes;
+    private javax.swing.JLabel PortValue;
     private javax.swing.JLabel Seconds;
     private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
