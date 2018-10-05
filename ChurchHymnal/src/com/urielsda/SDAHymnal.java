@@ -24,10 +24,11 @@ public class SDAHymnal extends javax.swing.JFrame {
      * Creates new form SDAHymnal
      */
     private String GlobalselectedSongs;
+    
     public SDAHymnal() {
         initComponents();
-
-
+        
+        
     }
 
     /**
@@ -38,6 +39,8 @@ public class SDAHymnal extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+
         jDialog1 = new javax.swing.JDialog();
         jScrollPane1 = new javax.swing.JScrollPane();
         jSonglist = new javax.swing.JTable();
@@ -70,8 +73,6 @@ public class SDAHymnal extends javax.swing.JFrame {
         ));
         jSonglist.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-
-
         jSonglist.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jSonglistMouseClicked(evt);
@@ -85,7 +86,7 @@ public class SDAHymnal extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Hymn Number");
+        jLabel1.setText("Hyme Numbber");
 
         jLabel2.setText("Title");
 
@@ -101,24 +102,23 @@ public class SDAHymnal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jButton1)))
+                .addGap(71, 71, 71)
+                .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 351, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,11 +131,11 @@ public class SDAHymnal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(28, 28, 28)
+                .addGap(36, 36, 36)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
 
@@ -152,10 +152,10 @@ public class SDAHymnal extends javax.swing.JFrame {
 
             DefaultTableModel model = (DefaultTableModel) jSonglist.getModel();
             // model.addRow(new Object[]{jTextField1.getText(),jTextField2.getText()});
-            
             final String dir = System.getProperty("user.dir");
             String[] splitFileStr = null;
-            String fullpath = dir + "/ChurchHymnal//sources/lyrics/MasterList.csv"; // this is to be modified on netbeans
+            String fullpath = dir + "/sources/lyrics/MasterList.csv"; // this is to be modified on netbeans
+            //path for netbeans "/sources/lyrics/MasterList.csv"
             System.out.println("current dir = " + dir);
             BufferedReader br = null;     
             try {
@@ -181,23 +181,29 @@ public class SDAHymnal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jSonglistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSonglistMouseClicked
-        // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) jSonglist.getModel();
         LyricsPanel lyrics = new LyricsPanel();
+        
+//LyricsPanel lyrics = new LyricsPanel();
         int row = jSonglist.rowAtPoint(evt.getPoint());
         int col = jSonglist.columnAtPoint(evt.getPoint());
         //JOptionPane.showMessageDialog(null,model.getValueAt(row,col));
-         GlobalselectedSongs = model.getValueAt(row,col).toString();
-         lyrics.recievedHymnalValue = GlobalselectedSongs;
-         lyrics.start();
-         System.out.println(getHymnalValue());
+         //GlobalselectedSongs = model.getValueAt(row,col).toString();
+         System.out.println(row + "," + col );
+         System.out.println(model.getDataVector().get(row));
+         Object songFilename = model.getDataVector().get(row);
+         String[] lyricsFname = songFilename.toString().split(",");
+        lyrics.recievedHymnalValue = replaceChar(lyricsFname[0])+ "-" +replaceChar(lyricsFname[1]);
+        lyrics.start();
     }//GEN-LAST:event_jSonglistMouseClicked
 
-    String getHymnalValue()
-    {
-        //System.out.println(GlobalselectedSongs);
-        return GlobalselectedSongs;
-    }
+    String replaceChar(String origCharter) {
+	String a = origCharter.toString();
+	String str2 = a.replaceAll("\\[","");
+	String str3 = str2.replaceAll("]","");
+	return str3;
+}
+    
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -257,5 +263,5 @@ public class SDAHymnal extends javax.swing.JFrame {
     private javax.swing.JTable jSonglist;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-   // End of variables declaration//GEN-END:variables
+        // End of variables declaration//GEN-END:variables
 }
