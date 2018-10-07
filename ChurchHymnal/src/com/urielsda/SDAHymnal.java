@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author urielwenceslao
@@ -23,14 +24,58 @@ public class SDAHymnal extends javax.swing.JFrame {
     /**
      * Creates new form SDAHymnal
      */
-    private String GlobalselectedSongs;
+    
+    private String dir = System.getProperty("user.dir");
+    private String fullpath = dir + "/sources/lyrics/MasterList.csv"; // this is to be modified on netbeans
+    DefaultTableModel model;
+    TableRowSorter<DefaultTableModel> tableSorter;
+    DefaultTableModel SortedTable;
     
     public SDAHymnal() {
         initComponents();
+        populate();        
+}
+   // populate table
+    
+   private void populate()
+   {
+   try {                                         
+
+            model = (DefaultTableModel) jSonglist.getModel();
+            String[] splitFileStr = null;
+            BufferedReader br = null;     
+            try {
+                br = new BufferedReader(new FileReader(fullpath));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(SDAHymnal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            String st;
+            int index = 0;
+            try {
+                while ((st = br.readLine()) != null) {
+                    splitFileStr = st.split(",");
+                    model.addRow(new Object[]{splitFileStr[index],splitFileStr[index+1]});
+                  }
+            }catch (Exception e){}
+            br.close(); 
+        } catch (IOException ex) {
+            Logger.getLogger(SDAHymnal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+   
+   }
+   //Filter data
+    private void filter (String query)
+    {
         
+        tableSorter = new TableRowSorter<DefaultTableModel>(model);
+        jSonglist.setRowSorter(tableSorter);
+        tableSorter.setRowFilter(RowFilter.regexFilter(query));
         
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,16 +84,14 @@ public class SDAHymnal extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jDialog1 = new javax.swing.JDialog();
         jScrollPane1 = new javax.swing.JScrollPane();
         jSonglist = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        SearchValue = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -73,6 +116,9 @@ public class SDAHymnal extends javax.swing.JFrame {
         ));
         jSonglist.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
 
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSonglist, org.jdesktop.beansbinding.ELProperty.create("${selectedElement}"), jSonglist, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        bindingGroup.addBinding(binding);
+
         jSonglist.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jSonglistMouseClicked(evt);
@@ -80,122 +126,85 @@ public class SDAHymnal extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jSonglist);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        SearchValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                SearchValueActionPerformed(evt);
+            }
+        });
+        SearchValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                SearchValueKeyReleased(evt);
             }
         });
 
-        jLabel1.setText("Hyme Numbber");
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        jLabel1.setText("Search Hymn Number/Title: ");
 
-        jLabel2.setText("Title");
-
-        jButton1.setText("Add");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 8)); // NOI18N
+        jLabel2.setText("by: Uriel Wenceslao");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(SearchValue, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 351, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel2)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(36, 36, 36)
-                .addComponent(jButton1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SearchValue, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addContainerGap())
         );
 
-
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void SearchValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchValueActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {                                         
-
-            DefaultTableModel model = (DefaultTableModel) jSonglist.getModel();
-            // model.addRow(new Object[]{jTextField1.getText(),jTextField2.getText()});
-            final String dir = System.getProperty("user.dir");
-            String[] splitFileStr = null;
-            String fullpath = dir + "/sources/lyrics/MasterList.csv"; // this is to be modified on netbeans
-            //path for netbeans "/sources/lyrics/MasterList.csv"
-            System.out.println("current dir = " + dir);
-            BufferedReader br = null;     
-            try {
-                br = new BufferedReader(new FileReader(fullpath));
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(SDAHymnal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            String st;
-            int index = 0;
-            try {
-                while ((st = br.readLine()) != null) {
-                    splitFileStr = st.split(",");
-                    model.addRow(new Object[]{splitFileStr[index],splitFileStr[index+1]});
-                 
-                }
-            }catch (Exception e){}
-            br.close();            
-        } catch (IOException ex) {
-            Logger.getLogger(SDAHymnal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_SearchValueActionPerformed
 
     private void jSonglistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSonglistMouseClicked
-        DefaultTableModel model = (DefaultTableModel) jSonglist.getModel();
         LyricsPanel lyrics = new LyricsPanel();
-        
-//LyricsPanel lyrics = new LyricsPanel();
+        /*
         int row = jSonglist.rowAtPoint(evt.getPoint());
         int col = jSonglist.columnAtPoint(evt.getPoint());
-        //JOptionPane.showMessageDialog(null,model.getValueAt(row,col));
-         //GlobalselectedSongs = model.getValueAt(row,col).toString();
-         System.out.println(row + "," + col );
-         System.out.println(model.getDataVector().get(row));
-         Object songFilename = model.getDataVector().get(row);
+        Object songFilename = model.getDataVector().get(row);
          String[] lyricsFname = songFilename.toString().split(",");
-        lyrics.recievedHymnalValue = replaceChar(lyricsFname[0])+ "-" +replaceChar(lyricsFname[1]);
+         */
+        int row = jSonglist.getSelectedRow();
+        //lyrics.recievedHymnalValue = replaceChar(lyricsFname[0])+ "-" +replaceChar(lyricsFname[1]);
+        lyrics.recievedHymnalValue = jSonglist.getValueAt(row,0)+ "-" + jSonglist.getValueAt(row,1);
         lyrics.start();
+  
     }//GEN-LAST:event_jSonglistMouseClicked
+
+    private void SearchValueKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchValueKeyReleased
+        String query = SearchValue.getText();
+        filter(query);
+        
+    }//GEN-LAST:event_SearchValueKeyReleased
 
     String replaceChar(String origCharter) {
 	String a = origCharter.toString();
@@ -203,7 +212,6 @@ public class SDAHymnal extends javax.swing.JFrame {
 	String str3 = str2.replaceAll("]","");
 	return str3;
 }
-    
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -234,34 +242,15 @@ public class SDAHymnal extends javax.swing.JFrame {
                 new SDAHymnal().setVisible(true);
             }
         });
-
-        /*
-        final String dir = System.getProperty("user.dir");
-         String[] splitFileStr = null;
-         String fullpath = dir + "/ChurchHymnal//sources/lyrics/titles.csv"; // this is not working on netbeans
-        System.out.println("current dir = " + dir);
-        
-        File file = new File(fullpath);
-        BufferedReader br = new BufferedReader(new FileReader(file)); 
-  
-  String st;
-  int index = 0;
-  while ((st = br.readLine()) != null) {
-      splitFileStr = st.split(",");  
-      System.out.println(splitFileStr[index] + splitFileStr[index+1]);
-   }
-  br.close();
-  */
   } 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTextField SearchValue;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jSonglist;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-        // End of variables declaration//GEN-END:variables
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
 }
